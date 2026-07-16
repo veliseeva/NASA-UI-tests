@@ -1,16 +1,16 @@
 import allure
 from allure_commons.types import Severity
 
-from NASA_ui_project.pages.search_page import search_page
-from NASA_ui_project.pages.filters_component import filters
-from NASA_ui_project.pages.result_page import result_page
-from NASA_ui_project.pages.results_component import results
+from pages.search_page import search_page
+from pages.filters_component import filters
+from pages.result_page import result_page
+from pages.results_component import results
 
 
 @allure.epic('Web-UI NASA')
 @allure.feature('Functionality of the results page')
 @allure.link('https://images.nasa.gov', name='NASA')
-class ResultTest:
+class TestResultPage:
 
     @allure.title('Testing date slider functionality')
     @allure.story('Date sliders')

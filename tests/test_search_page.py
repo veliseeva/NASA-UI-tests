@@ -1,9 +1,9 @@
 import allure
 from allure_commons.types import Severity
 
-from NASA_ui_project.pages.search_page import search_page
-from NASA_ui_project.pages.filters_component import filters
-from NASA_ui_project.pages.results_component import results
+from pages.search_page import search_page
+from pages.filters_component import filters
+from pages.results_component import results
 
 
 @allure.epic('Web-UI NASA')

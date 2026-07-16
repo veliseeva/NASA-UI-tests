@@ -1,5 +1,5 @@
 import allure
-from selene import browser, have, be, command
+from selene import browser, have, command
 
 
 class ResultPage:

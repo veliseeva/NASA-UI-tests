@@ -10,6 +10,7 @@ class SearchPage:
     def type_name_for_searching(self, search_name):
         with allure.step(f'Ввести в поиск значение "{search_name}".'):
             browser.element('#search-input').should(be.blank).type(search_name).press_enter()
+            browser.should(have.url_containing(f'q={search_name}'))
 
     def checking_search_result(self, result):
         with allure.step(f'Проверить в поиске значение "{result}".'):
