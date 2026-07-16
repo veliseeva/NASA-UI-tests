@@ -2,10 +2,11 @@
 .git
 .pytest_cache
 .env
-.allure-results/
+allure-results/
+tests/allure-results/
 .venv/
 venv/
 __pycache__/
 .pytest_cache/
 allure-report/
-notifications/
+notifications
