@@ -3,9 +3,9 @@
 .pytest_cache
 .env
 .allure-results/
-.notifications/
 .venv/
 venv/
 __pycache__/
 .pytest_cache/
 allure-report/
+notifications/
