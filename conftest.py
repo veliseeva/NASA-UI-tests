@@ -18,7 +18,7 @@ def slow_down_tests():
     time.sleep(random.uniform(4.0, 8.0))
 
 @pytest.fixture(scope='function', autouse=True)
-def setup_browser():
+def setup_browser(load_env):
     options = Options()
     options.page_load_strategy = 'eager'
 
