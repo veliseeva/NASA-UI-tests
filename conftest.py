@@ -65,12 +65,12 @@ def setup_browser(load_env):
 
     yield
 
-    attach.add_screenshot(browser)
-    attach.add_logs(browser)
-    attach.add_html(browser)
-    attach.add_video(browser)
-
     try:
+        attach.add_screenshot(browser)
+        attach.add_logs(browser)
+        attach.add_html(browser)
+        attach.add_video(browser)
+    except Exception as e:
+        print(f"Failed to save artifacts: {e}")
+    finally:
         browser.quit()
-    except Exception:
-        pass
