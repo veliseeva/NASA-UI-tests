@@ -26,6 +26,7 @@ def setup_browser(load_env):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--disable-gpu")
+    options.add_argument("--disable-features=VizDisplayCompositor")
     options.add_argument("--incognito")
     options.add_argument("--disable-application-cache")
     options.add_argument("--disable-session-crashed-bubble")
