@@ -1,21 +1,27 @@
 import os
 import time
 import random
+import logging
 import pytest
 from dotenv import load_dotenv
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
+
 from selenium import webdriver
 from selene import browser
 from utils import attach
+
 
 @pytest.fixture(scope="session", autouse=True)
 def load_env():
     load_dotenv()
 
+
 @pytest.fixture(autouse=True)
 def slow_down_tests():
     yield
     time.sleep(random.uniform(4.0, 8.0))
+
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_browser(load_env):
@@ -65,12 +71,18 @@ def setup_browser(load_env):
 
     yield
 
+    session_id = browser.driver.session_id
+
     try:
         attach.add_screenshot(browser)
         attach.add_logs(browser)
         attach.add_html(browser)
-        attach.add_video(browser)
-    except Exception as e:
-        print(f"Failed to save artifacts: {e}")
-    finally:
+    except WebDriverException as e:
+        logging.error(f"Ошибка при сборе артефактов браузера: {e}")
+
+    try:
         browser.quit()
+    except WebDriverException as e:
+        logging.error(f"Ошибка при закрытии браузера: {e}")
+
+    attach.add_video(session_id)

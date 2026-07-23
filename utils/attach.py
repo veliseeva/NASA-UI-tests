@@ -1,6 +1,9 @@
 import os
+import requests
+import logging
 import allure
 from allure_commons.types import AttachmentType
+
 
 
 def add_screenshot(browser):
@@ -44,27 +47,39 @@ def add_html(browser):
         pass
 
 
-def add_video(browser):
-    try:
-        session_id = browser.driver.session_id
-        if not session_id:
-            return
-        server_ip = os.getenv('SELENOID_IP')
-        if not server_ip:
-            return
-        video_url = f"http://{server_ip}:8080/video/{session_id}.mp4"
-        html = (
-            "<html><body>"
-            "<video width='100%' height='100%' controls autoplay>"
-            f"<source src='{video_url}' type='video/mp4'>"
-            "</video></body></html>"
-        )
+def add_video(session_id: str):
+    if not session_id:
+        return
 
-        allure.attach(
-            body=html,
-            name=f'video_{session_id}',
-            attachment_type=AttachmentType.HTML,
-            extension='.html'
-        )
-    except Exception:
-        pass
+    server_ip = os.getenv('SELENOID_IP')
+    if not server_ip:
+        logging.warning("SELENOID_IP не задан, видео не будет сохранено.")
+        return
+
+    video_url = f"http://{server_ip}:4444/video/{session_id}.mp4"
+
+    max_retries = 10
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(video_url, timeout=5)
+
+            if response.status_code == 200:
+                allure.attach(
+                    body=response.content,
+                    name=f'Video_{session_id}',
+                    attachment_type=AttachmentType.MP4,
+                    extension='.mp4'
+                )
+                return
+
+            elif response.status_code == 404:
+                import time
+                time.sleep(1)
+
+        except requests.RequestException as e:
+            logging.warning(f"Попытка {attempt + 1} получить видео не удалась: {e}")
+            import time
+            time.sleep(1)
+
+    logging.error(f"Не удалось скачать видео {session_id} после {max_retries} попыток.")
