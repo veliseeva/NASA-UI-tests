@@ -26,16 +26,19 @@ def slow_down_tests():
 @pytest.fixture(scope='function', autouse=True)
 def setup_browser(load_env):
     options = Options()
+    # Оптимизация скорости (не ждем загрузку тяжелой статики и аналитики NASA)
     options.page_load_strategy = 'eager'
-
+    # === Настройки стабильности для Docker/CI (Selenoid) ===
     options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-dev-shm-usage") # Решает проблему нехватки памяти в контейнере
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--disable-gpu")
-    options.add_argument("--disable-features=VizDisplayCompositor")
+    options.add_argument("--disable-features=VizDisplayCompositor") # Предотвращает падение рендерера Chrome
+    # === Изоляция и чистый стейт ===
     options.add_argument("--incognito")
     options.add_argument("--disable-application-cache")
     options.add_argument("--disable-session-crashed-bubble")
+    # === Обход Anti-Bot защиты (NASA WAF) ===
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     options.add_argument(
